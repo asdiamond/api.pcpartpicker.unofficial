@@ -77,6 +77,7 @@ public class Test {
 
     //FIXME some helpfull info: Xeons always have at least 4 cores. The only edge case that needs to be fixed is a 4
     //character long string where the 2 leftmost characters represent the cores and the rest the TDP
+
     public static int getCoresFromCPUData(String cpuData){
         String coresAndTDP;
         try {
