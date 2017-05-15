@@ -65,19 +65,17 @@ public class Test {
         }catch (StringIndexOutOfBoundsException e){
             return -1;
         }
-        if(coresAndTDP.charAt(1) == '0'){
+        if(coresAndTDP.charAt(1) == '0'){//if the second character is a 0, everything after that is TDP
             return Integer.parseInt(coresAndTDP.substring(1));
         }
-        if(coresAndTDP.length() > 4){
+        if(coresAndTDP.length() > 4){//if its more than 4 characters everything after the second character is TDP
             return Integer.parseInt(coresAndTDP.substring(2));
         }
-
-        return Integer.parseInt(coresAndTDP.substring(1));
+        return Integer.parseInt(coresAndTDP.substring(1));//otherwise everything after the first character is TDP
     }
 
     //FIXME some helpfull info: Xeons always have at least 4 cores. The only edge case that needs to be fixed is a 4
     //character long string where the 2 leftmost characters represent the cores and the rest the TDP
-
     public static int getCoresFromCPUData(String cpuData){
         String coresAndTDP;
         try {
@@ -90,6 +88,12 @@ public class Test {
             return Integer.parseInt(coresAndTDP.substring(0, 2));
         }
         if(coresAndTDP.length() > 4){//we can pretty safely assume that none have over 1000 watts of TDP
+            return Integer.parseInt(coresAndTDP.substring(0, 2));
+        }
+        if(cpuData.toLowerCase().contains("xeon")){//if we are dealing with a xeon
+            if(Integer.parseInt("" + coresAndTDP.charAt(0)) > 4){
+                return Integer.parseInt("" + coresAndTDP.charAt(0));
+            }
             return Integer.parseInt(coresAndTDP.substring(0, 2));
         }
 
