@@ -1,9 +1,9 @@
 public class CPU {
-    private double price = -1;
-    private String name = "NONAME";
-    private int cores = -1;
-    private double clockSpeed = -1.0;
-    private int tdp = -1;
+    private double price;
+    private String name = "";
+    private int cores;
+    private double clockSpeed;
+    private int tdp;
 
     @Override
     public String toString() {

@@ -8,39 +8,22 @@ import java.util.ArrayList;
 
 public class CPUConnection{
     public static ArrayList<CPU> parseCPUData(String url) throws IOException {
-        Document doc = null;
-//            doc = Jsoup.connect("https://pcpartpicker.com/products/cpu/fetch/?mode=list&xslug=&search=")
-//            doc = Jsoup.connect("https://pcpartpicker.com/products/cpu/fetch/?sort=d3&page=1&mode=list&xslug=&search=")
-            doc = Jsoup.connect(url)
-                    .header("application/json", "text/javascript")
-                    .header("gzip", "deflate")
-                    .header("en-US", "en")
-                    .header("Connection", "keep-alive").get();
 
-//        System.setOut(new PrintStream("info.txt"));
+        String[] rawData = Test.getRawData(url);
 
-        String[] theHtml = doc.text().split("html");
-        String[] stuff = theHtml[1].split("Add");
-
-        //should fix first index so its usable
-        if (stuff[0].contains("\"") && stuff[0].contains("\"")){
-             String removee = stuff[0].substring(stuff[0].indexOf("\""), stuff[0].indexOf(" ") + 2);
-             stuff[0] = stuff[0].replace(removee, "");
-        }
-
-        ArrayList<CPU> cpuList = new ArrayList<>(stuff.length - 1);
-        for (int i = 0; i < stuff.length - 1; i++) {//remember to neglect last element
+        ArrayList<CPU> cpuList = new ArrayList<>(rawData.length - 1);
+        for (int i = 0; i < rawData.length - 1; i++) {//remember to neglect last element
             //removes ratings
-            if (stuff[i].contains("(") && stuff[i].contains(")")) {
-                String removee = stuff[i].substring(stuff[i].indexOf("("), stuff[i].indexOf(")") + 1);
-                stuff[i] = stuff[i].replace(removee, "");
+            if (rawData[i].contains("(") && rawData[i].contains(")")) {
+                String removee = rawData[i].substring(rawData[i].indexOf("("), rawData[i].indexOf(")") + 1);
+                rawData[i] = rawData[i].replace(removee, "");
             }
             CPU curr = new CPU();
-            curr.setTdp(getTdpFromCPUData(stuff[i]));
-            curr.setCores(getCoresFromCPUData(stuff[i]));
-            curr.setName(getNameFromCPUData(stuff[i]));
-            curr.setClockSpeed(getClockSpeedFromCPUData(stuff[i]));
-            curr.setPrice(getPriceFromCPUData(stuff[i]));
+            curr.setTdp(getTdpFromCPUData(rawData[i]));
+            curr.setCores(getCoresFromCPUData(rawData[i]));
+            curr.setName(getNameFromCPUData(rawData[i]));
+            curr.setClockSpeed(getClockSpeedFromCPUData(rawData[i]));
+            curr.setPrice(getPriceFromCPUData(rawData[i]));
             System.out.println(curr);
             System.out.println();
             cpuList.add(i, curr);
