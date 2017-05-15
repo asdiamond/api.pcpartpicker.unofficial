@@ -1,9 +1,18 @@
-public class CPUCooler {
+import java.io.IOException;
+import java.util.ArrayList;
+
+public class CPUCooler extends ComputerPart {
+
     private String name = "";
     private String fanRpm = "";
     private String noiseLevel = "";
     private double price;
 
+    public CPUCooler(String cpuCoolerData){
+
+    }
+
+    @Override
     public String toString(){
         return "name = " +  this.name + "\nprice = " + this.price + "\nfan rpm = " + fanRpm + "\nnoise level = " + this.noiseLevel;
     }
