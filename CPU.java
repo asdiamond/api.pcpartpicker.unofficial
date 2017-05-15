@@ -7,7 +7,8 @@ public class CPU {
 
     @Override
     public String toString() {
-        return "name= " + this.name + "\nprice= " + this.price;
+        return "name= " + this.name + "\nprice= " + this.price + "$\ncores= " + this.cores + "\ntdp= " + this.tdp
+                + "W\nclockSpeed= " + this.clockSpeed + "GHz";
     }
 
     public double getPrice() {
@@ -30,7 +31,7 @@ public class CPU {
         this.cores = cores;
     }
 
-    public void setClockSpeed(int clockSpeed){
+    public void setClockSpeed(double clockSpeed){
         this.clockSpeed = clockSpeed;
     }
 
