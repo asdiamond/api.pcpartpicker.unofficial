@@ -2,25 +2,18 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
-import java.lang.reflect.ParameterizedType;
-import java.util.ArrayList;
 
-/**
- * Created by Aleksandr on 5/14/2017.
- */
-public class ComputerPart<T extends ComputerPart> {
+public class ComputerPart<T> {
+    private double price;
 
-    public ArrayList<T> parseResponse(String url) throws IOException {
-        String[] rawData = getRawData(url);
+    public ComputerPart(){}
 
-        ParameterizedType superClass = (ParameterizedType) getClass().getGenericSuperclass();
-        Class type = (Class)superClass.getActualTypeArguments()[0];
-
-        ArrayList<T> list = new ArrayList<>(rawData.length - 1);
-        for (int i = 0; i < rawData.length - 1; i++) {//remember to neglect last element
-//            list.add(i, type.newInstance(rawData[i]));
+    public ComputerPart(String rawData){
+        if (rawData.contains("(") && rawData.contains(")")) {
+            String removee = rawData.substring(rawData.indexOf("("), rawData.indexOf(")") + 1);
+            rawData = rawData.replace(removee, "");
         }
-        return list;
+        this.price = getPriceFromRawData(rawData);
     }
 
     /** The last index will always be fucked up just ignore it, it has no usable data anyways */
@@ -40,5 +33,20 @@ public class ComputerPart<T extends ComputerPart> {
         }
 
         return rawData;
+    }
+
+    public static double getPriceFromRawData(String rawData){
+        double price = 0.0;
+        try {
+            price = Double.parseDouble(rawData.substring(rawData.indexOf("$") + 1));
+        } catch(StringIndexOutOfBoundsException | NumberFormatException e ){
+            //this means the price is blank on their website, just dont worry about it.
+            price = 0.0;
+        }
+        return price;
+    }
+
+    public double getPrice() {
+        return price;
     }
 }

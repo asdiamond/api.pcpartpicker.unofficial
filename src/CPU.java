@@ -2,7 +2,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class CPU extends ComputerPart {
-    private double price;
     private String name = "";
     private int cores;
     private int tdp;
@@ -16,17 +15,6 @@ public class CPU extends ComputerPart {
             cpuList.add(i, new CPU(rawData[i]));
         }
         return cpuList;
-    }
-
-    private static double getPriceFromCPUData(String cpuData){
-        double price = 0.0;
-        try {
-            price = Double.parseDouble(cpuData.substring(cpuData.indexOf("$") + 1));
-        } catch(StringIndexOutOfBoundsException | NumberFormatException e ){
-            //this means the price is blank on their website, just dont worry about it.
-            price = 0.0;
-        }
-        return price;
     }
 
     private static int getTdpFromCPUData(String cpuData){
@@ -90,12 +78,7 @@ public class CPU extends ComputerPart {
     }
 
     public CPU(String cpuData){
-        //removes ratings
-        if (cpuData.contains("(") && cpuData.contains(")")) {
-            String removee = cpuData.substring(cpuData.indexOf("("), cpuData.indexOf(")") + 1);
-            cpuData = cpuData.replace(removee, "");
-        }
-        this.price      = getPriceFromCPUData(cpuData);
+        super(cpuData);
         this.name       = getNameFromCPUData(cpuData);
         this.cores      = getCoresFromCPUData(cpuData);
         this.clockSpeed = getClockSpeedFromCPUData(cpuData);
@@ -104,12 +87,8 @@ public class CPU extends ComputerPart {
 
     @Override
     public String toString() {
-        return "name= " + this.name + "\nprice= " + this.price + "$\ncores= " + this.cores + "\ntdp= " + this.tdp
+        return "name= " + this.name + "\nprice= " + super.getPrice() + "$\ncores= " + this.cores + "\ntdp= " + this.tdp
                 + "W\nclockSpeed= " + this.clockSpeed + "GHz";
-    }
-
-    public double getPrice() {
-        return price;
     }
 
     public String getName() {
