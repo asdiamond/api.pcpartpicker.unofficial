@@ -4,7 +4,8 @@ import org.jsoup.nodes.Document;
 import java.io.IOException;
 
 public class ComputerPart<T> {
-    private double price;
+    private double price = 0.0;
+    protected String name = "";
 
     public ComputerPart(){}
 
@@ -48,5 +49,9 @@ public class ComputerPart<T> {
 
     public double getPrice() {
         return price;
+    }
+
+    public String getName(){
+        return name;
     }
 }

@@ -2,14 +2,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class CPUCooler extends ComputerPart {
-
-    private String name = "";
     private String fanRpm = "";
     private String noiseLevel = "";
 
     public CPUCooler(String coolerData){
         super(coolerData);
-        this.name       = getNameFromCoolerData(coolerData);
+        super.name       = getNameFromCoolerData(coolerData);
         this.fanRpm     = getFanRpmFromCoolerData(coolerData);
         this.noiseLevel = getNoiseLevel(coolerData);
     }

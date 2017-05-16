@@ -2,7 +2,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class CPU extends ComputerPart {
-    private String name = "";
     private int cores;
     private int tdp;
     private double clockSpeed;
@@ -79,7 +78,7 @@ public class CPU extends ComputerPart {
 
     public CPU(String cpuData){
         super(cpuData);
-        this.name       = getNameFromCPUData(cpuData);
+        super.name      = getNameFromCPUData(cpuData);
         this.cores      = getCoresFromCPUData(cpuData);
         this.clockSpeed = getClockSpeedFromCPUData(cpuData);
         this.tdp        = getTdpFromCPUData(cpuData);
@@ -89,10 +88,6 @@ public class CPU extends ComputerPart {
     public String toString() {
         return "name= " + this.name + "\nprice= " + super.getPrice() + "$\ncores= " + this.cores + "\ntdp= " + this.tdp
                 + "W\nclockSpeed= " + this.clockSpeed + "GHz";
-    }
-
-    public String getName() {
-        return name;
     }
 
     public int getCores(){

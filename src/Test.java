@@ -1,4 +1,17 @@
 import java.io.IOException;
+import java.io.PrintStream;
+
+/**
+ * CPU link: https://pcpartpicker.com/products/cpu/fetch/?mode=list&xslug=&search=
+ * CPU Cooler link: https://pcpartpicker.com/products/cpu-cooler/fetch/?mode=list&xslug=&search=
+ * Motherboard link: https://pcpartpicker.com/products/motherboard/fetch/?mode=list&xslug=&search=
+ * Memory link: https://pcpartpicker.com/products/memory/fetch/?mode=list&xslug=&search=
+ * Storage link: https://pcpartpicker.com/products/memory/fetch/?mode=list&xslug=&search=
+ * GPU link: https://pcpartpicker.com/products/video-card/fetch/?mode=list&xslug=&search=
+ * Case link: https://pcpartpicker.com/products/case/fetch/?mode=list&xslug=&search=
+ * Power Supply link: https://pcpartpicker.com/products/power-supply/fetch/?mode=list&xslug=&search=
+ * Monitor link: https://pcpartpicker.com/products/monitor/fetch/?mode=list&xslug=&search=
+ * */
 
 public class Test {
 
@@ -9,9 +22,9 @@ public class Test {
                 System.out.println(curr);
                 System.out.println();
             }*/
-//            System.setOut(new PrintStream("info.txt"));
+            System.setOut(new PrintStream("info.txt"));
 
-            String[] rawData = ComputerPart.getRawData("https://pcpartpicker.com/products/cpu-cooler/fetch/?mode=list&xslug=&search=");
+            String[] rawData = ComputerPart.getRawData("https://pcpartpicker.com/products/memory/fetch/?mode=list&xslug=&search=");
             for (int i = 0; i < rawData.length - 1; i++) {
                 String curr = rawData[i];
                 if (curr.contains("(") && curr.contains(")")) {
