@@ -19,11 +19,17 @@ public class Memory extends ComputerPart{
     }
 
     private static String getSpeedFromMemData(String memData){
-        return null;
+        if(memData.contains("DDR-333") || memData.contains("DDR-400")){//the only ones without 4 digit speed
+            return memData.substring(memData.indexOf("DDR"), memData.indexOf("DDR") + 7);
+        }
+        return memData.substring(memData.indexOf("DDR"), memData.indexOf("DDR") + 9);//4 digits of DDR + 1, and 4 extra digits of speed.
     }
 
-    private static String getTypeFromMemData(String memData){
-        return null;
+    public static String getTypeFromMemData(String memData){
+        if(memData.contains("DDR-333") || memData.contains("DDR-400")){
+            return memData.substring(memData.indexOf("DDR") + 7, memData.indexOf("DDR") + 18);
+        }
+        return memData.substring(memData.indexOf("DDR") + 9, memData.indexOf("DDR") + 21);
     }
 
     private static int getCasFromMemData(String memData){
