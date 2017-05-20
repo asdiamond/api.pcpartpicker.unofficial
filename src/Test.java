@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.io.PrintStream;
 
 /**
  * CPU link: https://pcpartpicker.com/products/cpu/fetch/?mode=list&xslug=&search=
@@ -17,6 +18,7 @@ public class Test {
     public static void main(String[] args) {
         try{
 //            String[] rawData = ComputerPart.getRawData("https://pcpartpicker.com/products/memory/fetch/?mode=list&xslug=&search=");
+            System.setOut(new PrintStream("info.txt"));
             String[] rawData = ComputerPart.getRawData("https://pcpartpicker.com/products/memory/fetch/?sort=a2&page=1&mode=list&xslug=&search=");
             for (int i = 0; i < rawData.length - 1; i++) {
                 String curr = rawData[i];
@@ -28,8 +30,7 @@ public class Test {
                     curr = curr.substring(0, curr.indexOf("$"));
                 }
                 System.out.println(curr);
-                System.out.println(Memory.getTypeFromMemData(curr));
-                System.out.println();
+//                System.out.println(Memory.getTypeFromMemData(curr));
             }
         } catch (IOException e){
             System.out.println("Failed connection");

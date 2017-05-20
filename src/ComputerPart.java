@@ -1,7 +1,10 @@
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.parser.Parser;
 
 import java.io.IOException;
+import java.io.PrintStream;
+import java.net.URL;
 
 public class ComputerPart<T> {
     private double price = 0.0;
@@ -53,5 +56,13 @@ public class ComputerPart<T> {
 
     public String getName(){
         return name;
+    }
+
+    public static void main(String[] args) throws IOException {
+        String url = "https://pcpartpicker.com/products/cpu/fetch/?mode=list&xslug=&search=";
+        System.setProperty("http.agent", "Chrome");
+        Document doc = Jsoup.parse(new URL(url).openStream(), "UTF-8", "", Parser.xmlParser());
+        System.setOut(new PrintStream("info.txt"));
+        System.out.println(doc);
     }
 }
