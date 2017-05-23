@@ -24,10 +24,10 @@ public class Test {
 
     public static void main(String[] args) {
         try {
-            String url = "https://pcpartpicker.com/products/cpu-cooler/fetch/?mode=list&xslug=&search=";
+            String url = "https://pcpartpicker.com/products/motherboard/fetch/?mode=list&xslug=&search=";
             System.setProperty("http.agent", "Chrome");
             Document doc = Jsoup.parse(new URL(url).openStream(), "UTF-8", "", Parser.xmlParser());
-            getCPUCoolersFromDoc(doc);
+            getMobosFromDoc(doc);
         }catch (IOException e){
             System.out.println("Failed connection");
             e.printStackTrace();
@@ -47,20 +47,43 @@ public class Test {
     }
 
     private static ArrayList<CPUCooler> getCPUCoolersFromDoc(Document doc){
-        Elements coolerElements = doc.getElementsByTag("tr");
-        ArrayList<CPUCooler> coolers = new ArrayList<>(doc.getElementsByTag("tr").size());
-        for (Element curr : coolerElements) {
-            String[] coolerArr = new String[5];
+        String[][] rawData = getRawData(doc);
+        ArrayList<CPUCooler> coolers = new ArrayList<>(rawData.length);
+
+        for (int i = 0; i < rawData.length; i++) {
+            coolers.add(i, new CPUCooler(rawData[i]));
+        }
+
+        return coolers;
+    }
+
+    private static ArrayList<Motherboard> getMobosFromDoc(Document doc){
+        String[][] rawData = getRawData(doc);
+        ArrayList<Motherboard> motherboards = new ArrayList<>(rawData.length);
+
+        for (int i = 0; i < rawData.length; i++) {
+            motherboards.add(new Motherboard(rawData[i]));
+        }
+        return motherboards;
+    }
+
+    private static String[][] getRawData(Document doc){
+        String[][] rawData = new String[doc.getElementsByTag("tr").size()][];
+        int j = 0;
+        for (Element curr : doc.getElementsByTag("tr")) {
             int i = 0;
-            for (Element innerTd : curr.getElementsByTag("td")) {
-                if(innerTd.text().equals("Add")) continue;
-                if(innerTd.text().contains("(") && innerTd.text().contains(")")) continue;
-                if(innerTd.text().length() < 1) continue;
-                coolerArr[i] = innerTd.text();
+            rawData[j] = new String[curr.getElementsByTag("td").size()];
+            for (Element info : curr.getElementsByTag("td")) {
+                if(info.text().length() < 1) continue;
+                if(info.text().equals("Add")) continue;
+                if(info.text().matches("\\(\\d+\\)")) continue;//number between parenthesis, the ratings
+                rawData[j][i] = info.text();
+//                System.out.println(rawData[j][i]);
                 i++;
             }
-            coolers.add(new CPUCooler(coolerArr));
+//            System.out.println();
+            j++;
         }
-        return coolers;
+        return rawData;
     }
 }

@@ -1,33 +1,32 @@
 /**
  * Created by Aleksandr on 5/15/2017.
  */
-public class Motherboard extends ComputerPart {
-    private String socket = "";
-    private int ramSlots = 0;
-    private int maxRam = 0;
+public class Motherboard {
+    private String name;
+    private String socket;
+    private String formFactor;
+    private int ramSlots;
+    private String maxRam;
+    private double price;
 
-    public Motherboard(String moboData){
-        super(moboData);
-        name = getNameFromMoboData(moboData);
-        socket = getSocketFromMoboData(moboData);
-        ramSlots = getRamSlotsFromMoboData(moboData);
-        maxRam = getMaxRamFromMoboData(moboData);
+    public Motherboard(String[] moboData){
+        if(moboData.length < 5) return;
+        name = moboData[0];
+        socket = moboData[1];
+        formFactor = moboData[2];
+        ramSlots = Integer.parseInt(moboData[3]);
+        maxRam = moboData[4];
+        try {
+            price = Double.parseDouble(moboData[5].replace("$", ""));
+        }catch (NullPointerException e){
+            //no price
+            price = 0.0;
+        }
     }
 
-    public static String getSocketFromMoboData(String moboData){
-        return null;
-    }
-
-    public static String getNameFromMoboData(String moboData){
-        return null;
-    }
-
-    public static int getRamSlotsFromMoboData(String moboData){
-        return 0;
-    }
-
-    public static int getMaxRamFromMoboData(String moboData){
-        return 0;
+    @Override
+    public String toString() {
+        return name + "\n" + socket + "\n" + formFactor + "\n" + ramSlots + "\n" + maxRam + "\n" + price;
     }
 
     public String getSocket() {
@@ -38,7 +37,19 @@ public class Motherboard extends ComputerPart {
         return ramSlots;
     }
 
-    public int getMaxRam() {
+    public String getMaxRam() {
         return maxRam;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getFormFactor() {
+        return formFactor;
+    }
+
+    public double getPrice() {
+        return price;
     }
 }
