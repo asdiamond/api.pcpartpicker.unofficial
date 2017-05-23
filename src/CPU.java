@@ -1,93 +1,30 @@
-import java.io.IOException;
-import java.util.ArrayList;
-
-public class CPU extends ComputerPart {
+public class CPU {
+    private String name;
+    private double clockSpeed;
     private int cores;
     private int tdp;
-    private double clockSpeed;
-
-    public static ArrayList<CPU> parseCPUData(String url) throws IOException {
-        String[] rawData = getRawData(url);
-
-        ArrayList<CPU> cpuList = new ArrayList<>(rawData.length - 1);
-        for (int i = 0; i < rawData.length - 1; i++) {//remember to neglect last element
-            cpuList.add(i, new CPU(rawData[i]));
-        }
-        return cpuList;
-    }
-
-    private static int getTdpFromCPUData(String cpuData){
-        String coresAndTDP;
-        try {
-            coresAndTDP = cpuData.substring(cpuData.indexOf("GHz") + 3, cpuData.lastIndexOf("W "));
-        }catch (StringIndexOutOfBoundsException e){
-            return -1;
-        }
-        if(coresAndTDP.charAt(1) == '0'){//if the second character is a 0, everything after that is TDP
-            return Integer.parseInt(coresAndTDP.substring(1));
-        }
-        if(coresAndTDP.length() > 4){//if its more than 4 characters everything after the second character is TDP
-            return Integer.parseInt(coresAndTDP.substring(2));
-        }
-        return Integer.parseInt(coresAndTDP.substring(1));//otherwise everything after the first character is TDP
-    }
-
-    private static int getCoresFromCPUData(String cpuData){
-        String coresAndTDP;
-        try {
-            coresAndTDP = cpuData.substring(cpuData.indexOf("GHz") + 3, cpuData.lastIndexOf("W "));
-        }catch (StringIndexOutOfBoundsException e){
-            return -1;
-        }
-        if(coresAndTDP.charAt(1) == '0'){//if the second digit is a zero then you have a multiple of 10 cores
-            //AND its impossible to have TDP starting with 0, so its a for sure case.
-            return Integer.parseInt(coresAndTDP.substring(0, 2));
-        }
-        if(coresAndTDP.length() > 4){//we can pretty safely assume that none have over 1000 watts of TDP
-            return Integer.parseInt(coresAndTDP.substring(0, 2));
-        }
-        if(cpuData.toLowerCase().contains("xeon")){//if we are dealing with a xeon
-            if(Integer.parseInt("" + coresAndTDP.charAt(0)) > 4){
-                return Integer.parseInt("" + coresAndTDP.charAt(0));
-            }
-            return Integer.parseInt(coresAndTDP.substring(0, 2));
-        }
-
-        return Integer.parseInt("" + coresAndTDP.charAt(0));
-    }
-
-    private static double getClockSpeedFromCPUData(String cpuData){
-        double clockSpeed = 0.0;
-        try{
-            clockSpeed = Double.parseDouble(cpuData.substring(cpuData.indexOf("GHz") - 3, cpuData.indexOf("GHz")));
-        } catch (StringIndexOutOfBoundsException | NumberFormatException e){
-            clockSpeed = 0.0;
-        }
-        return clockSpeed;
-    }
-
-    private static String getNameFromCPUData(String cpuData){
-        String name = "";
-        try{
-            name = cpuData.substring(0, cpuData.indexOf("GHz") - 3);
-        } catch (StringIndexOutOfBoundsException e){
-            name = "NONAME";
-        }
-        return name;
-    }
+    private double price;
 
     public CPU(String cpuData){
-        super(cpuData);
-        super.name      = getNameFromCPUData(cpuData);
-        this.cores      = getCoresFromCPUData(cpuData);
-        this.clockSpeed = getClockSpeedFromCPUData(cpuData);
-        this.tdp        = getTdpFromCPUData(cpuData);
+        name = cpuData.substring(0, cpuData.indexOf("GHz") - 4);
+        clockSpeed = Double.parseDouble(cpuData.substring(cpuData.indexOf("GHz") - 4, cpuData.indexOf("GHz")));
+        cores = Integer.parseInt(cpuData.substring(cpuData.indexOf("GHz") + 3, cpuData.indexOf("GHz") + 6).trim());
+        tdp = Integer.parseInt(cpuData.substring(cpuData.indexOf("GHz") + 6, cpuData.indexOf("W")).trim());
+        try {
+            price = Double.parseDouble(cpuData.substring(cpuData.indexOf("$") + 1).replace("Add", "").trim());
+        }catch (StringIndexOutOfBoundsException | NumberFormatException e){
+            price = 0;//no price, dont worry about it
+        }
     }
 
     @Override
     public String toString() {
-        return "name= " + this.name + "\nprice= " + super.getPrice() + "$\ncores= " + this.cores + "\ntdp= " + this.tdp
+        return "name= " + this.name + "\nprice= " + this.getPrice() + "$\ncores= " + this.cores + "\ntdp= " + this.tdp
                 + "W\nclockSpeed= " + this.clockSpeed + "GHz";
+    }
+
+    public double getPrice() {
+        return price;
     }
 
     public int getCores(){
@@ -100,5 +37,9 @@ public class CPU extends ComputerPart {
 
     public double getTdp(){
         return this.tdp;
+    }
+
+    public String getName() {
+        return name;
     }
 }

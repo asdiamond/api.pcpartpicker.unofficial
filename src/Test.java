@@ -1,5 +1,12 @@
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.parser.Parser;
+import org.jsoup.select.Elements;
+
 import java.io.IOException;
-import java.io.PrintStream;
+import java.net.URL;
+import java.util.ArrayList;
 
 /**
  * CPU link: https://pcpartpicker.com/products/cpu/fetch/?mode=list&xslug=&search=
@@ -16,26 +23,38 @@ import java.io.PrintStream;
 public class Test {
 
     public static void main(String[] args) {
-        try{
-//            String[] rawData = ComputerPart.getRawData("https://pcpartpicker.com/products/memory/fetch/?mode=list&xslug=&search=");
-            System.setOut(new PrintStream("info.txt"));
-            String[] rawData = ComputerPart.getRawData("https://pcpartpicker.com/products/memory/fetch/?sort=a2&page=1&mode=list&xslug=&search=");
-            for (int i = 0; i < rawData.length - 1; i++) {
-                String curr = rawData[i];
-                if (curr.contains("(") && curr.contains(")")) {
-                    String removee = curr.substring(curr.indexOf("("), curr.indexOf(")") + 1);
-                    curr = curr.replace(removee, "");
-                }
-                if(curr.contains("$")){
-                    curr = curr.substring(0, curr.indexOf("$"));
-                }
-                System.out.println(curr);
-//                System.out.println(Memory.getTypeFromMemData(curr));
-            }
-        } catch (IOException e){
+        try {
+            String cpuUrl = "https://pcpartpicker.com/products/cpu/fetch/?mode=list&xslug=&search=";
+            System.setProperty("http.agent", "Chrome");
+            Document doc = Jsoup.parse(new URL(cpuUrl).openStream(), "UTF-8", "", Parser.xmlParser());
+            ArrayList<CPU> cpus = getCPUsFromDoc(doc);
+        }catch (IOException e){
             System.out.println("Failed connection");
             e.printStackTrace();
         }
     }
 
+    //returns names from cpu doc
+    private static ArrayList<String> getNamesFromDoc(Document doc) {
+        ArrayList<String> arr = new ArrayList<>();
+        for (Element curr : doc.getElementsByTag("a")) {
+            if(curr.text().equalsIgnoreCase("add") || curr.text().length() < 3){//should remove the page numbers, checks if its 1 or 2 digits
+                continue;
+            }
+            arr.add(curr.text());
+        }
+        return arr;
+    }
+
+    private static ArrayList<CPU> getCPUsFromDoc(Document doc){
+        Elements trElements = doc.getElementsByTag("tr");
+        ArrayList<CPU> cpus = new ArrayList<>(trElements.size());
+        for (int i = 0; i < trElements.size(); i++) {
+            cpus.add(i, new CPU(trElements.get(i).text()));
+            System.out.println(trElements.get(i).text());
+            System.out.println(cpus.get(i).getPrice());
+            System.out.println();
+        }
+        return cpus;
+    }
 }
