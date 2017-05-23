@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * CPU Cooler link: https://pcpartpicker.com/products/cpu-cooler/fetch/?mode=list&xslug=&search=
  * Motherboard link: https://pcpartpicker.com/products/motherboard/fetch/?mode=list&xslug=&search=
  * Memory link: https://pcpartpicker.com/products/memory/fetch/?mode=list&xslug=&search=
- * Storage link: https://pcpartpicker.com/products/memory/fetch/?mode=list&xslug=&search=
+ * Storage link: https://pcpartpicker.com/products/internal-hard-drive/fetch/?mode=list&xslug=&search=
  * GPU link: https://pcpartpicker.com/products/video-card/fetch/?mode=list&xslug=&search=
  * Case link: https://pcpartpicker.com/products/case/fetch/?mode=list&xslug=&search=
  * Power Supply link: https://pcpartpicker.com/products/power-supply/fetch/?mode=list&xslug=&search=
@@ -24,14 +24,34 @@ public class Test {
 
     public static void main(String[] args) {
         try {
-            String url = "https://pcpartpicker.com/products/memory/fetch/?mode=list&xslug=&search=";
+            String url = "https://pcpartpicker.com/products/internal-hard-drive/fetch/?mode=list&xslug=&search=";
             System.setProperty("http.agent", "Chrome");
             Document doc = Jsoup.parse(new URL(url).openStream(), "UTF-8", "", Parser.xmlParser());
-            getMemoryFromDoc(doc);
+            getStorageFromDoc(doc);
         }catch (IOException e){
             System.out.println("Failed connection");
             e.printStackTrace();
         }
+    }
+
+    private static String[][] getRawData(Document doc){
+        String[][] rawData = new String[doc.getElementsByTag("tr").size()][];
+        int j = 0;
+        for (Element curr : doc.getElementsByTag("tr")) {
+            int i = 0;
+            rawData[j] = new String[curr.getElementsByTag("td").size() - 3];//one of the 3 base cases
+            for (Element info : curr.getElementsByTag("td")) {
+                if(info.text().length() < 1) continue;
+                if(info.text().equals("Add")) continue;
+                if(info.text().matches("\\(\\d+\\)")) continue;//number between parenthesis, the ratings
+                rawData[j][i] = info.text();
+//                System.out.println(rawData[j][i]);
+                i++;
+            }
+//            System.out.println();
+            j++;
+        }
+        return rawData;
     }
 
     private static ArrayList<CPU> getCPUsFromDoc(Document doc){
@@ -76,23 +96,15 @@ public class Test {
         return rams;
     }
 
-    private static String[][] getRawData(Document doc){
-        String[][] rawData = new String[doc.getElementsByTag("tr").size()][];
-        int j = 0;
-        for (Element curr : doc.getElementsByTag("tr")) {
-            int i = 0;
-            rawData[j] = new String[curr.getElementsByTag("td").size() - 3];//one of the 3 base cases
-            for (Element info : curr.getElementsByTag("td")) {
-                if(info.text().length() < 1) continue;
-                if(info.text().equals("Add")) continue;
-                if(info.text().matches("\\(\\d+\\)")) continue;//number between parenthesis, the ratings
-                rawData[j][i] = info.text();
-//                System.out.println(rawData[j][i]);
-                i++;
+    private static ArrayList<Storage> getStorageFromDoc(Document doc){
+        String[][] rawData = getRawData(doc);
+        for (int i = 0; i < rawData.length; i++) {
+            for (int j = 0; j < rawData[i].length; j++) {
+                System.out.println(rawData[i][j]);
             }
-//            System.out.println();
-            j++;
+            System.out.println();
         }
-        return rawData;
+        return null;
     }
+
 }
