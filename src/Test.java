@@ -24,10 +24,10 @@ public class Test {
 
     public static void main(String[] args) {
         try {
-            String url = "https://pcpartpicker.com/products/motherboard/fetch/?mode=list&xslug=&search=";
+            String url = "https://pcpartpicker.com/products/memory/fetch/?mode=list&xslug=&search=";
             System.setProperty("http.agent", "Chrome");
             Document doc = Jsoup.parse(new URL(url).openStream(), "UTF-8", "", Parser.xmlParser());
-            getMobosFromDoc(doc);
+            getMemoryFromDoc(doc);
         }catch (IOException e){
             System.out.println("Failed connection");
             e.printStackTrace();
@@ -67,12 +67,21 @@ public class Test {
         return motherboards;
     }
 
+    private static ArrayList<Memory> getMemoryFromDoc(Document doc){
+        String[][] rawData = getRawData(doc);
+        ArrayList<Memory> rams = new ArrayList<>(rawData.length);
+        for (int i = 0; i < rawData.length; i++) {
+            rams.add(new Memory(rawData[i]));
+        }
+        return rams;
+    }
+
     private static String[][] getRawData(Document doc){
         String[][] rawData = new String[doc.getElementsByTag("tr").size()][];
         int j = 0;
         for (Element curr : doc.getElementsByTag("tr")) {
             int i = 0;
-            rawData[j] = new String[curr.getElementsByTag("td").size()];
+            rawData[j] = new String[curr.getElementsByTag("td").size() - 3];//one of the 3 base cases
             for (Element info : curr.getElementsByTag("td")) {
                 if(info.text().length() < 1) continue;
                 if(info.text().equals("Add")) continue;
