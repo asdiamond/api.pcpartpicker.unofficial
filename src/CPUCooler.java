@@ -1,51 +1,29 @@
-import java.io.IOException;
-import java.util.ArrayList;
-
-public class CPUCooler extends ComputerPart {
+public class CPUCooler {
+    private String name;
     private String fanRpm = "";
     private String noiseLevel = "";
+    private double price;
 
-    public CPUCooler(String coolerData){
-        super(coolerData);
-        super.name       = getNameFromCoolerData(coolerData);
-        this.fanRpm     = getFanRpmFromCoolerData(coolerData);
-        this.noiseLevel = getNoiseLevel(coolerData);
-    }
-
-    public static ArrayList<CPUCooler> parseCPUCoolerData(String url) throws IOException {
-        String [] rawData = getRawData(url);
-
-        ArrayList<CPUCooler> coolers = new ArrayList<>(rawData.length - 1);
-        for (int i = 0; i < rawData.length - 1; i++) {
-            coolers.add(i, new CPUCooler(rawData[i]));
-        }
-        return coolers;
-    }
-
-    private static String getNameFromCoolerData(String coolerData){
-//        return coolerData.substring(0, coolerData.indexOf("RPM") - 3);
-        return null;
-    }
-
-    private static String getFanRpmFromCoolerData(String coolerData){
-//        return coolerData.substring(coolerData.indexOf("RPM") + 3, coolerData.indexOf(" dbA") - 4);
-        return null;
-    }
-
-    private static String getNoiseLevel(String coolerData){
-        String noiseLevel = null;
+    public CPUCooler(String[] coolerData){
+        if(coolerData.length < 4) return;
+        name = coolerData[0];
+        fanRpm = coolerData[1];
+        noiseLevel = coolerData[2];
         try {
-            noiseLevel = coolerData.substring(coolerData.indexOf("RPM") + 3, coolerData.indexOf(" dbA"));
-        }catch (StringIndexOutOfBoundsException e){
-            //there are some with no noise level
-            noiseLevel = "";
-       }
-       return noiseLevel;
+            price = Double.parseDouble(coolerData[3].replace("$", ""));
+        }catch (NullPointerException e){
+            //no price
+            price = 0.0;
+        }
     }
 
     @Override
     public String toString(){
-        return "name = " +  this.name + "\nprice = " + super.getPrice() + "\nfan rpm = " + fanRpm + "\nnoise level = " + this.noiseLevel;
+        return "name = " +  this.name + "\nprice = " +this.getPrice() + "\nfan rpm = " + fanRpm + "\nnoise level = " + this.noiseLevel;
+    }
+
+    public double getPrice() {
+        return price;
     }
 
     public String getName() {

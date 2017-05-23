@@ -24,26 +24,14 @@ public class Test {
 
     public static void main(String[] args) {
         try {
-            String cpuUrl = "https://pcpartpicker.com/products/cpu/fetch/?mode=list&xslug=&search=";
+            String url = "https://pcpartpicker.com/products/cpu-cooler/fetch/?mode=list&xslug=&search=";
             System.setProperty("http.agent", "Chrome");
-            Document doc = Jsoup.parse(new URL(cpuUrl).openStream(), "UTF-8", "", Parser.xmlParser());
-            ArrayList<CPU> cpus = getCPUsFromDoc(doc);
+            Document doc = Jsoup.parse(new URL(url).openStream(), "UTF-8", "", Parser.xmlParser());
+            getCPUCoolersFromDoc(doc);
         }catch (IOException e){
             System.out.println("Failed connection");
             e.printStackTrace();
         }
-    }
-
-    //returns names from cpu doc
-    private static ArrayList<String> getNamesFromDoc(Document doc) {
-        ArrayList<String> arr = new ArrayList<>();
-        for (Element curr : doc.getElementsByTag("a")) {
-            if(curr.text().equalsIgnoreCase("add") || curr.text().length() < 3){//should remove the page numbers, checks if its 1 or 2 digits
-                continue;
-            }
-            arr.add(curr.text());
-        }
-        return arr;
     }
 
     private static ArrayList<CPU> getCPUsFromDoc(Document doc){
@@ -56,5 +44,23 @@ public class Test {
             System.out.println();
         }
         return cpus;
+    }
+
+    private static ArrayList<CPUCooler> getCPUCoolersFromDoc(Document doc){
+        Elements coolerElements = doc.getElementsByTag("tr");
+        ArrayList<CPUCooler> coolers = new ArrayList<>(doc.getElementsByTag("tr").size());
+        for (Element curr : coolerElements) {
+            String[] coolerArr = new String[5];
+            int i = 0;
+            for (Element innerTd : curr.getElementsByTag("td")) {
+                if(innerTd.text().equals("Add")) continue;
+                if(innerTd.text().contains("(") && innerTd.text().contains(")")) continue;
+                if(innerTd.text().length() < 1) continue;
+                coolerArr[i] = innerTd.text();
+                i++;
+            }
+            coolers.add(new CPUCooler(coolerArr));
+        }
+        return coolers;
     }
 }
