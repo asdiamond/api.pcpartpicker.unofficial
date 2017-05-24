@@ -2,12 +2,30 @@
  * Created by Aleksandr on 5/15/2017.
  */
 public class Case {
-    private String type = "";
-    private int fiveInchSlots = 0;
-    private int threeInchSlots = 0;
-    private boolean powerSupply = false;
+    private String name;
+    private String type;
+    private int fiveInchSlots;
+    private int threeInchSlots;
+    private int powerSupply;
+    private double price;
 
-    public Case(String caseData){
+    public Case(String[] caseData){
+        name = caseData[1];
+        type = caseData[2];
+        fiveInchSlots = Integer.parseInt(caseData[3]);
+        threeInchSlots = Integer.parseInt(caseData[4]);
+        if(caseData[5].contains("W")) powerSupply = Integer.parseInt(caseData[5].replace("W", ""));
+        try{
+            price = Double.parseDouble(caseData[6].replace("$", ""));
+        }catch (NumberFormatException e){
+            //no price
+            price = 0;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return name + "\n" + type + "\n" + fiveInchSlots + "\n" + threeInchSlots + "\n" + powerSupply + "\n" + price;
     }
 
     public String getType() {
@@ -22,7 +40,19 @@ public class Case {
         return threeInchSlots;
     }
 
-    public boolean isPowerSupply() {
+    public int isPowerSupply() {
         return powerSupply;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getPowerSupply() {
+        return powerSupply;
+    }
+
+    public double getPrice() {
+        return price;
     }
 }

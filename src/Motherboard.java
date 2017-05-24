@@ -52,4 +52,5 @@ public class Motherboard {
     public double getPrice() {
         return price;
     }
+
 }

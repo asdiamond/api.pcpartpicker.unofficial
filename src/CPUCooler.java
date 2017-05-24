@@ -30,24 +30,12 @@ public class CPUCooler {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getFanRpm() {
         return fanRpm;
     }
 
-    public void setFanRpm(String fanRpm) {
-        this.fanRpm = fanRpm;
-    }
-
     public String getNoiseLevel() {
         return noiseLevel;
-    }
-
-    public void setNoiseLevel(String noiseLevel) {
-        this.noiseLevel = noiseLevel;
     }
 
 }

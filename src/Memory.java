@@ -52,4 +52,16 @@ public class Memory {
     public int getSize() {
         return size;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getPricePerGB() {
+        return pricePerGB;
+    }
+
+    public double getPrice() {
+        return price;
+    }
 }
