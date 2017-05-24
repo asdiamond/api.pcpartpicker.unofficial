@@ -5,13 +5,13 @@ public class CPUCooler {
     private double price;
 
     public CPUCooler(String[] coolerData){
-        if(coolerData.length < 4) return;
-        name = coolerData[0];
-        fanRpm = coolerData[1];
-        noiseLevel = coolerData[2];
+        if(coolerData.length < 5) return;
+        name = coolerData[1];
+        fanRpm = coolerData[2];
+        noiseLevel = coolerData[3];
         try {
-            price = Double.parseDouble(coolerData[3].replace("$", ""));
-        }catch (NullPointerException e){
+            price = Double.parseDouble(coolerData[4].replace("$", ""));
+        }catch (NumberFormatException e){
             //no price
             price = 0.0;
         }

@@ -10,15 +10,15 @@ public class Motherboard {
     private double price;
 
     public Motherboard(String[] moboData){
-        if(moboData.length < 5) return;
-        name = moboData[0];
-        socket = moboData[1];
-        formFactor = moboData[2];
-        ramSlots = Integer.parseInt(moboData[3]);
-        maxRam = moboData[4];
+        if(moboData.length < 6) return;
+        name = moboData[1];
+        socket = moboData[2];
+        formFactor = moboData[3];
+        ramSlots = Integer.parseInt(moboData[4]);
+        maxRam = moboData[5];
         try {
-            price = Double.parseDouble(moboData[5].replace("$", ""));
-        }catch (NullPointerException e){
+            price = Double.parseDouble(moboData[6].replace("$", ""));
+        }catch (NumberFormatException e){
             //no price
             price = 0.0;
         }

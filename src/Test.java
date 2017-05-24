@@ -24,10 +24,22 @@ public class Test {
 
     public static void main(String[] args) {
         try {
-            String url = "https://pcpartpicker.com/products/internal-hard-drive/fetch/?mode=list&xslug=&search=";
+//            String url = "https://pcpartpicker.com/products/internal-hard-drive/fetch/?mode=list&xslug=&search=";
+//            String url = "https://pcpartpicker.com/products/cpu-cooler/fetch/?mode=list&xslug=&search=";
+//            String url = "https://pcpartpicker.com/products/motherboard/fetch/?mode=list&xslug=&search=";
+            String url = "https://pcpartpicker.com/products/memory/fetch/?mode=list&xslug=&search=";
+
+
             System.setProperty("http.agent", "Chrome");
             Document doc = Jsoup.parse(new URL(url).openStream(), "UTF-8", "", Parser.xmlParser());
-            getStorageFromDoc(doc);
+
+
+//            getStorageFromDoc(doc);
+//            getCPUCoolersFromDoc(doc);
+//            getRawData(doc);
+//            getMobosFromDoc(doc);
+            getMemoryFromDoc(doc);
+//            getRawData(doc);
         }catch (IOException e){
             System.out.println("Failed connection");
             e.printStackTrace();
@@ -39,9 +51,8 @@ public class Test {
         int j = 0;
         for (Element curr : doc.getElementsByTag("tr")) {
             int i = 0;
-            rawData[j] = new String[curr.getElementsByTag("td").size() - 3];//one of the 3 base cases
+            rawData[j] = new String[curr.getElementsByTag("td").size() - 2];//one of the 3 base cases
             for (Element info : curr.getElementsByTag("td")) {
-                if(info.text().length() < 1) continue;
                 if(info.text().equals("Add")) continue;
                 if(info.text().matches("\\(\\d+\\)")) continue;//number between parenthesis, the ratings
                 rawData[j][i] = info.text();
@@ -83,6 +94,8 @@ public class Test {
 
         for (int i = 0; i < rawData.length; i++) {
             motherboards.add(new Motherboard(rawData[i]));
+            System.out.println(motherboards.get(i));
+            System.out.println();
         }
         return motherboards;
     }

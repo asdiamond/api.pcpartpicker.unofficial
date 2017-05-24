@@ -12,16 +12,16 @@ public class Memory {
     private double price;
 
     public Memory(String[] memData){
-        name = memData[0];
-        speed = memData[1];
-        type = memData[2];
-        cas = Integer.parseInt(memData[3]);
-        modules = memData[4];
-        size = Integer.parseInt(memData[5].replace("GB", ""));
+        name = memData[1];
+        speed = memData[2];
+        type = memData[3];
+        cas = Integer.parseInt(memData[4]);
+        modules = memData[5];
+        size = Integer.parseInt(memData[6].replace("GB", ""));
         try {
-            pricePerGB = Double.parseDouble(memData[6].replace("$", ""));
-            price = Double.parseDouble(memData[7].replace("$", ""));
-        }catch (NullPointerException e){
+            pricePerGB = Double.parseDouble(memData[7].replace("$", ""));
+            price = Double.parseDouble(memData[8].replace("$", ""));
+        }catch (NumberFormatException e){
             //there can be no price, and therefore sometimes no price per gb
             pricePerGB = 0.0;
             price = 0.0;
