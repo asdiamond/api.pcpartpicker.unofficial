@@ -1,4 +1,6 @@
-public class CPUCooler {
+import java.io.Serializable;
+
+public class CPUCooler implements Serializable{
     private String name;
     private String fanRpm = "";
     private String noiseLevel = "";
@@ -37,5 +39,6 @@ public class CPUCooler {
     public String getNoiseLevel() {
         return noiseLevel;
     }
+
 
 }

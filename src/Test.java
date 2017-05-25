@@ -4,7 +4,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -24,13 +24,36 @@ public class Test {
 
     public static void main(String[] args) {
         try {
-            String url = "https://pcpartpicker.com/products/monitor/fetch/?mode=list&xslug=&search=";
+            String url = "https://pcpartpicker.com/products/cpu/fetch/?mode=list&xslug=&search=";
             System.setProperty("http.agent", "Chrome");
             Document doc = Jsoup.parse(new URL(url).openStream(), "UTF-8", "", Parser.xmlParser());
+
         }catch (IOException e){
             System.out.println("Failed connection");
             e.printStackTrace();
         }
+    }
+
+    private static void serializeComputerParts(String filename, ArrayList cpuParts) throws IOException {
+        FileOutputStream fileOut = new FileOutputStream(filename);
+        ObjectOutputStream out = new ObjectOutputStream(fileOut);
+        for (Object curr : cpuParts) {
+            out.writeObject(curr);
+        }
+        out.close();
+        fileOut.close();
+    }
+
+    private static <T> ArrayList<T> deserializeComputerParts(String filename) throws IOException {
+            FileInputStream in = new FileInputStream(filename);
+            ObjectInputStream inputStream = new ObjectInputStream(in);
+            ArrayList<T> parts = new ArrayList<>();
+        try {
+            for(Object curr; (curr = inputStream.readObject()) != null; ) parts.add((T)curr);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return parts;
     }
 
     private static String[][] getRawData(Document doc){
@@ -43,23 +66,21 @@ public class Test {
                 if(info.text().equals("Add")) continue;
                 if(info.text().matches("\\(\\d+\\)")) continue;//number between parenthesis, the ratings
                 rawData[j][i] = info.text();
-//                System.out.println(rawData[j][i]);
+                System.out.println(rawData[j][i]);
                 i++;
             }
-//            System.out.println();
+            System.out.println();
             j++;
         }
         return rawData;
     }
 
     private static ArrayList<CPU> getCPUsFromDoc(Document doc){
-        Elements trElements = doc.getElementsByTag("tr");
-        ArrayList<CPU> cpus = new ArrayList<>(trElements.size());
-        for (int i = 0; i < trElements.size(); i++) {
-            cpus.add(i, new CPU(trElements.get(i).text()));
-            System.out.println(trElements.get(i).text());
-            System.out.println(cpus.get(i).getPrice());
-            System.out.println();
+        String[][] rawData = getRawData(doc);
+        ArrayList<CPU> cpus = new ArrayList<>(rawData.length);
+
+        for (int i = 0; i < rawData.length; i++) {
+            cpus.add(i, new CPU(rawData[i]));
         }
         return cpus;
     }

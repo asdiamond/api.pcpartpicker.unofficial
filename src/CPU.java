@@ -5,15 +5,15 @@ public class CPU {
     private int tdp;
     private double price;
 
-    public CPU(String cpuData){
-        name = cpuData.substring(0, cpuData.indexOf("GHz") - 4);
-        clockSpeed = Double.parseDouble(cpuData.substring(cpuData.indexOf("GHz") - 4, cpuData.indexOf("GHz")));
-        cores = Integer.parseInt(cpuData.substring(cpuData.indexOf("GHz") + 3, cpuData.indexOf("GHz") + 6).trim());
-        tdp = Integer.parseInt(cpuData.substring(cpuData.indexOf("GHz") + 6, cpuData.indexOf("W")).trim());
+    public CPU(String[] cpuData){
+        name = cpuData[1];
+        clockSpeed = Double.parseDouble(cpuData[2].replace("GHz", ""));
+        cores = Integer.parseInt(cpuData[3]);
+        tdp = Integer.parseInt(cpuData[4].replace("W", ""));
         try {
-            price = Double.parseDouble(cpuData.substring(cpuData.indexOf("$") + 1).replace("Add", "").trim());
-        }catch (StringIndexOutOfBoundsException | NumberFormatException e){
-            price = 0;//no price, dont worry about it
+            price = Double.parseDouble(cpuData[5].replace("$", ""));
+        }catch (NumberFormatException e){
+            price = 0.0;
         }
     }
 
