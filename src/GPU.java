@@ -1,9 +1,11 @@
+import java.io.Serializable;
+
 /**
  * Created by Aleksandr on 5/15/2017.
  * GPU clock is in MHz
  * series of GPU can be blank but not null.
  */
-public class GPU  {
+public class GPU implements Serializable, ComputerPart{
     private String name;
     private String series;
     private String chipSet;

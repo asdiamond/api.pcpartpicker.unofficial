@@ -1,7 +1,9 @@
+import java.io.Serializable;
+
 /**
  * Created by Aleksandr on 5/15/2017.
  */
-public class Monitor {
+public class Monitor implements Serializable, ComputerPart{
     private String name;
     private String resolution;
     private double size;

@@ -1,4 +1,6 @@
-public class CPU {
+import java.io.Serializable;
+
+public class CPU implements ComputerPart, Serializable{
     private String name;
     private double clockSpeed;
     private int cores;

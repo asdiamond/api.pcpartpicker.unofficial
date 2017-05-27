@@ -2,8 +2,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.parser.Parser;
-import org.jsoup.select.Elements;
-
 import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
@@ -20,41 +18,7 @@ import java.util.ArrayList;
  * Monitor link: https://pcpartpicker.com/products/monitor/fetch/?mode=list&xslug=&search=
  * */
 
-public class Test {
-
-    public static void main(String[] args) {
-        try {
-            String url = "https://pcpartpicker.com/products/cpu/fetch/?mode=list&xslug=&search=";
-            System.setProperty("http.agent", "Chrome");
-            Document doc = Jsoup.parse(new URL(url).openStream(), "UTF-8", "", Parser.xmlParser());
-
-        }catch (IOException e){
-            System.out.println("Failed connection");
-            e.printStackTrace();
-        }
-    }
-
-    private static void serializeComputerParts(String filename, ArrayList cpuParts) throws IOException {
-        FileOutputStream fileOut = new FileOutputStream(filename);
-        ObjectOutputStream out = new ObjectOutputStream(fileOut);
-        for (Object curr : cpuParts) {
-            out.writeObject(curr);
-        }
-        out.close();
-        fileOut.close();
-    }
-
-    private static <T> ArrayList<T> deserializeComputerParts(String filename) throws IOException {
-            FileInputStream in = new FileInputStream(filename);
-            ObjectInputStream inputStream = new ObjectInputStream(in);
-            ArrayList<T> parts = new ArrayList<>();
-        try {
-            for(Object curr; (curr = inputStream.readObject()) != null; ) parts.add((T)curr);
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return parts;
-    }
+public class Main {
 
     private static String[][] getRawData(Document doc){
         String[][] rawData = new String[doc.getElementsByTag("tr").size()][];
@@ -161,4 +125,68 @@ public class Test {
         }
         return monitors;
     }
+
+    public ArrayList<CPU> getCPUs() throws IOException {
+        String url = "https://pcpartpicker.com/products/cpu/fetch/?mode=list&xslug=&search=";
+        System.setProperty("http.agent", "Chrome");
+        Document doc = Jsoup.parse(new URL(url).openStream(), "UTF-8", "", Parser.xmlParser());
+        return getCPUsFromDoc(doc);
+    }
+
+    public ArrayList<CPUCooler> getCPUCoolers() throws IOException {
+        String url = "https://pcpartpicker.com/products/cpu-cooler/fetch/?mode=list&xslug=&search=";
+        System.setProperty("http.agent", "Chrome");
+        Document doc = Jsoup.parse(new URL(url).openStream(), "UTF-8", "", Parser.xmlParser());
+        return getCPUCoolersFromDoc(doc);
+    }
+
+    public ArrayList<Motherboard> getMotherboards() throws IOException {
+        String url = "https://pcpartpicker.com/products/motherboard/fetch/?mode=list&xslug=&search=";
+        System.setProperty("http.agent", "Chrome");
+        Document doc = Jsoup.parse(new URL(url).openStream(), "UTF-8", "", Parser.xmlParser());
+        return getMobosFromDoc(doc);
+    }
+
+    public ArrayList<Memory> getMemory() throws IOException {
+        String url = "https://pcpartpicker.com/products/memory/fetch/?mode=list&xslug=&search=";
+        System.setProperty("http.agent", "Chrome");
+        Document doc = Jsoup.parse(new URL(url).openStream(), "UTF-8", "", Parser.xmlParser());
+        return getMemoryFromDoc(doc);
+    }
+
+    public ArrayList<Storage> getStorage() throws IOException {
+        String url = "https://pcpartpicker.com/products/internal-hard-drive/fetch/?mode=list&xslug=&search=";
+        System.setProperty("http.agent", "Chrome");
+        Document doc = Jsoup.parse(new URL(url).openStream(), "UTF-8", "", Parser.xmlParser());
+        return getStorageFromDoc(doc);
+    }
+
+    public ArrayList<GPU> getGPUs() throws IOException {
+        String url = "https://pcpartpicker.com/products/video-card/fetch/?mode=list&xslug=&search=";
+        System.setProperty("http.agent", "Chrome");
+        Document doc = Jsoup.parse(new URL(url).openStream(), "UTF-8", "", Parser.xmlParser());
+        return getGPUsFromDoc(doc);
+    }
+
+    public ArrayList<Case> getCases() throws IOException {
+        String url = "https://pcpartpicker.com/products/case/fetch/?mode=list&xslug=&search=";
+        System.setProperty("http.agent", "Chrome");
+        Document doc = Jsoup.parse(new URL(url).openStream(), "UTF-8", "", Parser.xmlParser());
+        return getCasesFromDoc(doc);
+    }
+
+    public ArrayList<PowerSupply> getPowerSupplies() throws IOException {
+        String url = "https://pcpartpicker.com/products/power-supply/fetch/?mode=list&xslug=&search=";
+        System.setProperty("http.agent", "Chrome");
+        Document doc = Jsoup.parse(new URL(url).openStream(), "UTF-8", "", Parser.xmlParser());
+        return getPowerSuppliesFromDoc(doc);
+    }
+
+    public ArrayList<Monitor> getMonitors() throws IOException {
+        String url = "https://pcpartpicker.com/products/monitor/fetch/?mode=list&xslug=&search=";
+        System.setProperty("http.agent", "Chrome");
+        Document doc = Jsoup.parse(new URL(url).openStream(), "UTF-8", "", Parser.xmlParser());
+        return getMonitorsFromDoc(doc);
+    }
+
 }

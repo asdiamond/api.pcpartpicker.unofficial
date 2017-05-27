@@ -1,6 +1,6 @@
 import java.io.Serializable;
 
-public class CPUCooler implements Serializable{
+public class CPUCooler implements Serializable, ComputerPart{
     private String name;
     private String fanRpm = "";
     private String noiseLevel = "";

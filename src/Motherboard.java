@@ -1,7 +1,9 @@
+import java.io.Serializable;
+
 /**
  * Created by Aleksandr on 5/15/2017.
  */
-public class Motherboard {
+public class Motherboard implements Serializable, ComputerPart{
     private String name;
     private String socket;
     private String formFactor;
