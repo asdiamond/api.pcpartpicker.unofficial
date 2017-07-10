@@ -2,23 +2,56 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.parser.Parser;
+import org.jsoup.select.Elements;
+
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-/**
- * CPU link: https://pcpartpicker.com/products/cpu/fetch/?mode=list&xslug=&search=
- * CPU Cooler link: https://pcpartpicker.com/products/cpu-cooler/fetch/?mode=list&xslug=&search=
- * Motherboard link: https://pcpartpicker.com/products/motherboard/fetch/?mode=list&xslug=&search=
- * Memory link: https://pcpartpicker.com/products/memory/fetch/?mode=list&xslug=&search=
- * Storage link: https://pcpartpicker.com/products/internal-hard-drive/fetch/?mode=list&xslug=&search=
- * GPU link: https://pcpartpicker.com/products/video-card/fetch/?mode=list&xslug=&search=
- * Case link: https://pcpartpicker.com/products/case/fetch/?mode=list&xslug=&search=
- * Power Supply link: https://pcpartpicker.com/products/power-supply/fetch/?mode=list&xslug=&search=
- * Monitor link: https://pcpartpicker.com/products/monitor/fetch/?mode=list&xslug=&search=
- * */
 
 public class Main {
+    static String CPUlink= "https://pcpartpicker.com/products/cpu/fetch/?mode=list&xslug=&search=";
+    static String CPUCoolerlink= "https://pcpartpicker.com/products/cpu-cooler/fetch/?mode=list&xslug=&search=";
+    static String Motherboardlink= "https://pcpartpicker.com/products/motherboard/fetch/?mode=list&xslug=&search=";
+    static String Memorylink="https://pcpartpicker.com/products/memory/fetch/?mode=list&xslug=&search=";
+    static String Storagelink= "https://pcpartpicker.com/products/internal-hard-drive/fetch/?mode=list&xslug=&search=";
+    static String GPUlink= "https://pcpartpicker.com/products/video-card/fetch/?mode=list&xslug=&search=";
+    static String Caselink = "https://pcpartpicker.com/products/case/fetch/?mode=list&xslug=&search=";
+    static String PowerSupply = "https://pcpartpicker.com/products/power-supply/fetch/?mode=list&xslug=&search=";
+    static String Monitorlink = "https://pcpartpicker.com/products/monitor/fetch/?mode=list&xslug=&search=";
+
+    public static void main(String[] args) throws IOException {
+//        System.setOut(new PrintStream("info.txt"));
+        System.setProperty("http.agent", "Chrome");
+
+        Document doc = Jsoup.parse(new URL(PowerSupply).openStream(), "UTF-8", "", Parser.xmlParser());
+//        System.out.println(doc);
+//        Document mobileDoc = Jsoup.parse(new URL("https://pcpartpicker.com/products/cpu/fetch/?mode=mobile&xslug=&search=").openStream(), "UTF-8", "", Parser.xmlParser());
+//        System.out.println(mobileDoc);
+//        getRawData(mobileDoc);
+
+        getUrlsFromDoc(doc);
+//        System.setOut(System.err);
+//        getRawData(doc);
+    }
+
+    private static void getUrlsFromDoc(Document doc) {
+        Elements links = doc.getElementsByTag("a");
+//        Pattern pattern = Pattern.compile("&quot;#(.*?)\\&quot;");
+        Pattern pattern = Pattern.compile("&quot;#(.*?)\\\\");//should grab it without the annoying "\" at the end
+        //the original is still there just in case ;)
+        for (Element curr : links) {
+            if(curr.text().equals("Add")){
+                Matcher matcher = pattern.matcher(curr.toString());
+                if(matcher.find()){
+                    System.out.println(matcher.group(1));
+                }
+            }
+        }
+    }
 
     private static String[][] getRawData(Document doc){
         String[][] rawData = new String[doc.getElementsByTag("tr").size()][];
