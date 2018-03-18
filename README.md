@@ -7,3 +7,7 @@ then
 git submodule update
 
 from project root to initialize submodules.
+
+or..
+run git clone --recursive 
+when cloning this repo
