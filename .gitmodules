@@ -1,3 +1,0 @@
-[submodule "lib/jsoup"]
-	path = lib/jsoup
-	url = https://github.com/jhy/jsoup.git
